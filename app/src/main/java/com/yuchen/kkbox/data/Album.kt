@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Data(
+data class Album(
     val id: String,
     val title: String,
     val description: String,

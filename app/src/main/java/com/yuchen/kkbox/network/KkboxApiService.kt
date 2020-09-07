@@ -3,8 +3,7 @@ package com.yuchen.kkbox.network
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.yuchen.kkbox.data.Auth
-import com.yuchen.kkbox.data.Result
+import com.yuchen.kkbox.data.*
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -52,38 +51,32 @@ object KkboxAuthApi{
 }
 
 interface KkboxApiService {
+    @GET("v1.1/charts")
+    fun getRankList(
+        @Header("Authorization") Authorization: String,
+        @Query("territory") territory: String
+    ): Deferred<AlbumsResult>
+
     @GET("v1.1/featured-playlists")
     fun getFeaturedPlaylists(
         @Header("Authorization") Authorization: String,
         @Query("territory") territory: String,
         @Query("limit") limit: Int
-    ): Deferred<Result>
+    ): Deferred<AlbumsResult>
 
-    @GET("v1.1/charts")
-    fun getRankList(
+    @GET("v1.1/new-release-categories")
+    fun getCategories(
         @Header("Authorization") Authorization: String,
         @Query("territory") territory: String
-    ): Deferred<Result>
+    ): Deferred<CategoriesResult>
 
-//    @GET("v1.1/charts")
-//    fun getCharts(
-//        @Header("Authorization") Authorization: String,
-//        @Query("territory") territory: String
-//    ): Call<String>
-//
-//    @GET("v1.1/new-release-categories")
-//    fun getNewRelease(
-//        @Header("Authorization") Authorization: String,
-//        @Query("territory") territory: String
-//    ): Call<String>
-//
-//    @GET("v1.1/new-release-categories/{category_id}/albums")
-//    fun getNewReleaseByCategories(
-//        @Header("Authorization") Authorization: String,
-//        @Path("category_id") categoryId: String,
-//        @Query("territory") territory: String,
-//        @Query("limit") limit: Int
-//    ): Call<String>
+    @GET("v1.1/new-release-categories/{categories}/albums")
+    fun getNewReleaseAlbumsByCategories(
+        @Path("categories") categories:String,
+        @Header("Authorization") Authorization: String,
+        @Query("territory") territory: String,
+        @Query("limit") limit: Int
+    ): Deferred<NewReleaseResult>
 }
 
 object KkboxApi{

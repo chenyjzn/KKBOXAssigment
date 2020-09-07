@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="imageUrl"
+            type="String" />
+        <variable
+            name="newRelease"
+            type="com.yuchen.kkbox.data.NewRelease" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,30 +18,31 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/holder_song_horizonal_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:id="@+id/holder_song_vertical_image"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            app:bindImage="@{imageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_gallery" />
 
         <TextView
-            android:id="@+id/holder_song_horizonal_text_2"
+            android:id="@+id/holder_song_vertical_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/holder_song_horizonal_image"
-            app:layout_constraintStart_toStartOf="@+id/holder_song_horizonal_image"
-            app:layout_constraintTop_toBottomOf="@+id/holder_song_horizonal_image" />
+            app:layout_constraintEnd_toEndOf="@+id/holder_song_vertical_image"
+            app:layout_constraintStart_toStartOf="@+id/holder_song_vertical_image"
+            app:layout_constraintTop_toBottomOf="@+id/holder_song_vertical_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

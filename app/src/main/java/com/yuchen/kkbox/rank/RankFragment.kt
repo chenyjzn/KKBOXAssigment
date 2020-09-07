@@ -23,7 +23,7 @@ class RankFragment : Fragment() {
         val adapter = RankAdapter(viewModel)
         binding.rankRecycler.adapter = adapter
         binding.rankRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-        viewModel.result.observe(viewLifecycleOwner, Observer {
+        viewModel.rankResult.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it.data)
                 adapter.notifyDataSetChanged()
