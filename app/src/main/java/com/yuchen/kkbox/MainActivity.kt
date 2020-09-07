@@ -1,13 +1,16 @@
 package com.yuchen.kkbox
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.yuchen.kkbox.databinding.ActivityMainBinding
 import com.yuchen.kkbox.factory.ViewModelFactory
+
+const val LIMIT = 10
+const val TERRITORY = "TW"
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -15,10 +18,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        viewModel.auth.observe(this, Observer {
-            it?.let{
-                Log.d("chenyjzn","$it")
-            }
-        })
+        val authBundle = intent.getBundleExtra("AuthBundle")
+        viewModel
+        this.findNavController(R.id.nav_host_fragment).setGraph(R.navigation.kkbox_navigation, authBundle)
+    }
+
+    fun showErrorMessage(message: String){
+        Snackbar
+            .make(binding.mainConstraint, message, Snackbar.LENGTH_LONG)
+            .show()
     }
 }

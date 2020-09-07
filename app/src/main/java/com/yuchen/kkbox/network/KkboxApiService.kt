@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.yuchen.kkbox.data.Auth
+import com.yuchen.kkbox.data.Result
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,12 +12,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
-private const val KKBOX_API = "https://account.kkbox.com/"
+private const val KKBOX_AUTH_API = "https://account.kkbox.com/"
+private const val KKBOX_API = "https://api.kkbox.com/"
 
 private val moshi= Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
 private val client = OkHttpClient.Builder()
     .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC })
+    .build()
+
+private val retrofitKkboxAuth = Retrofit.Builder()
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+    .client(client)
+    .baseUrl(KKBOX_AUTH_API)
     .build()
 
 private val retrofitKkbox = Retrofit.Builder()
@@ -26,10 +35,55 @@ private val retrofitKkbox = Retrofit.Builder()
     .baseUrl(KKBOX_API)
     .build()
 
-interface KkboxApiService{
+interface KkboxAuthApiService {
     @FormUrlEncoded
     @POST("oauth2/token")
-    fun getKKBOXAuth(@Field("grant_type") grantType:String,@Field("client_id") clientId:String,@Field("client_secret") clientSecret:String): Deferred<Auth>
+    fun getKKBOXAuth(
+        @Field("grant_type") grantType: String,
+        @Field("client_id") clientId: String,
+        @Field("client_secret") clientSecret: String
+    ): Deferred<Auth>
+}
+
+object KkboxAuthApi{
+    val kkboxAuthApiService:KkboxAuthApiService by lazy {
+        retrofitKkboxAuth.create(KkboxAuthApiService::class.java)
+    }
+}
+
+interface KkboxApiService {
+    @GET("v1.1/featured-playlists")
+    fun getFeaturedPlaylists(
+        @Header("Authorization") Authorization: String,
+        @Query("territory") territory: String,
+        @Query("limit") limit: Int
+    ): Deferred<Result>
+
+    @GET("v1.1/charts")
+    fun getRankList(
+        @Header("Authorization") Authorization: String,
+        @Query("territory") territory: String
+    ): Deferred<Result>
+
+//    @GET("v1.1/charts")
+//    fun getCharts(
+//        @Header("Authorization") Authorization: String,
+//        @Query("territory") territory: String
+//    ): Call<String>
+//
+//    @GET("v1.1/new-release-categories")
+//    fun getNewRelease(
+//        @Header("Authorization") Authorization: String,
+//        @Query("territory") territory: String
+//    ): Call<String>
+//
+//    @GET("v1.1/new-release-categories/{category_id}/albums")
+//    fun getNewReleaseByCategories(
+//        @Header("Authorization") Authorization: String,
+//        @Path("category_id") categoryId: String,
+//        @Query("territory") territory: String,
+//        @Query("limit") limit: Int
+//    ): Call<String>
 }
 
 object KkboxApi{
