@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yuchen.kkbox.MainActivity
 import com.yuchen.kkbox.databinding.FragmentTracksBinding
@@ -49,6 +50,13 @@ class TracksFragment : Fragment() {
                         (activity as MainActivity).showErrorMessage(it.message)
                     }
                 }
+            }
+        })
+
+        viewModel.navigateToTrack.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                findNavController().navigate(TracksFragmentDirections.actionTracksFragmentToTrackFragment(it))
+                viewModel.navigateToTracksDone()
             }
         })
         return binding.root

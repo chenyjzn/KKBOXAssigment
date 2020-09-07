@@ -30,10 +30,14 @@ class TracksAdapter(private val viewModel: TracksViewModel) : RecyclerView.Adapt
     }
 
     class SongHorizontalHolder(var binding: HolderSongHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(track: Track,album: Album) {
+        fun bind(track: Track,viewModel: TracksViewModel) {
+            val album = viewModel.album
             binding.album = album
             binding.holderSongHorizonalText1.text = track.name
             binding.holderSongHorizonalText2.text = "${album.displayArtist}@${album.displayDate}"
+            binding.holderSongVerticalImage.setOnClickListener {
+                viewModel.setNavigateToTrack(track)
+            }
             binding.executePendingBindings()
         }
     }
@@ -65,7 +69,7 @@ class TracksAdapter(private val viewModel: TracksViewModel) : RecyclerView.Adapt
             }
             is SongHorizontalHolder -> {
                 trackList?.let {
-                    holder.bind(it[position-2],viewModel.album)
+                    holder.bind(it[position-2],viewModel)
                 }
             }
         }

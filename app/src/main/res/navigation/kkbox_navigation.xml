@@ -27,5 +27,17 @@
         <argument
             android:name="auth"
             app:argType="com.yuchen.kkbox.data.Auth" />
+        <action
+            android:id="@+id/action_tracksFragment_to_trackFragment"
+            app:destination="@id/trackFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trackFragment"
+        android:name="com.yuchen.kkbox.track.TrackFragment"
+        android:label="fragment_track"
+        tools:layout="@layout/fragment_track">
+        <argument
+            android:name="track"
+            app:argType="com.yuchen.kkbox.data.Track" />
     </fragment>
 </navigation>

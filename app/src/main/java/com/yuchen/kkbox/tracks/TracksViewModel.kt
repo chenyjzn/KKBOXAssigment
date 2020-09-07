@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.yuchen.kkbox.LIMIT_500
 import com.yuchen.kkbox.OFFSET_0
 import com.yuchen.kkbox.TERRITORY
-import com.yuchen.kkbox.data.Album
-import com.yuchen.kkbox.data.Auth
-import com.yuchen.kkbox.data.AlbumsResult
-import com.yuchen.kkbox.data.TracksResult
+import com.yuchen.kkbox.data.*
 import com.yuchen.kkbox.network.KkboxApi
 import com.yuchen.kkbox.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +27,10 @@ class TracksViewModel(private val auth: Auth,val album: Album) : ViewModel() {
     val loadApiStatus: LiveData<LoadApiStatus>
         get() = _loadApiStatus
 
+    private val _navigateToTrack = MutableLiveData<Track>()
+    val navigateToTrack: LiveData<Track>
+        get() = _navigateToTrack
+
     private fun getTracksList(){
         coroutineScope.launch {
             val tracksResultDeferred = KkboxApi.kkboxApiService.getTracksByAlbum(
@@ -45,6 +46,14 @@ class TracksViewModel(private val auth: Auth,val album: Album) : ViewModel() {
                 _loadApiStatus.value = LoadApiStatus.DONE
             }
         }
+    }
+
+    fun setNavigateToTrack(track: Track){
+        _navigateToTrack.value = track
+    }
+
+    fun navigateToTracksDone(){
+        _navigateToTrack.value = null
     }
 
     init {
