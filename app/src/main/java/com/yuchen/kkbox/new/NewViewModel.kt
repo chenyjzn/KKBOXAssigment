@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yuchen.kkbox.LIMIT
 import com.yuchen.kkbox.TERRITORY
+import com.yuchen.kkbox.data.Album
 import com.yuchen.kkbox.data.Auth
 import com.yuchen.kkbox.data.CategoriesResult
 import com.yuchen.kkbox.data.AlbumsResult
@@ -35,6 +36,10 @@ class NewViewModel(private val auth: Auth) : ViewModel() {
     private val _loadApiStatus = MutableLiveData<LoadApiStatus>()
     val loadApiStatus: LiveData<LoadApiStatus>
         get() = _loadApiStatus
+
+    private val _navigateToTracks = MutableLiveData<Album>()
+    val navigateToTracks: LiveData<Album>
+        get() = _navigateToTracks
 
     init {
         getCategoriesList()
@@ -92,6 +97,14 @@ class NewViewModel(private val auth: Auth) : ViewModel() {
                 _loadApiStatus.value = LoadApiStatus.DONE
             }
         }
+    }
+
+    fun setNavigateToTracks(album: Album){
+        _navigateToTracks.value = album
+    }
+
+    fun navigateToTracksDone(){
+        _navigateToTracks.value = null
     }
 
     override fun onCleared() {

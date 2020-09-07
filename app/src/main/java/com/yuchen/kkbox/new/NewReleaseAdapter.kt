@@ -15,16 +15,19 @@ class NewReleaseAdapter(private val viewModel: NewViewModel) : RecyclerView.Adap
     }
 
     inner class SongVerticalHolder(var binding: HolderSongVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(album : Album) {
+        fun bind(album : Album,viewModel: NewViewModel) {
             binding.album = album
             binding.holderSongVerticalText.text = album.displayTitle
+            binding.holderSongVerticalImage.setOnClickListener {
+                viewModel.setNavigateToTracks(album)
+            }
             binding.executePendingBindings()
         }
     }
 
     override fun onBindViewHolder(holder: SongVerticalHolder, position: Int) {
         albumList?.let {
-            holder.bind(it[position])
+            holder.bind(it[position],viewModel)
         }
     }
 

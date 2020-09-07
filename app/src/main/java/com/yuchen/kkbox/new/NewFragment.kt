@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yuchen.kkbox.MainActivity
 import com.yuchen.kkbox.data.Auth
 import com.yuchen.kkbox.databinding.FragmentNewBinding
 import com.yuchen.kkbox.factory.ViewModelAuthFactory
+import com.yuchen.kkbox.home.HomeFragmentDirections
 import com.yuchen.kkbox.network.LoadApiStatus
 
 class NewFragment : Fragment() {
@@ -56,6 +58,12 @@ class NewFragment : Fragment() {
                         (activity as MainActivity).showErrorMessage(it.message)
                     }
                 }
+            }
+        })
+        viewModel.navigateToTracks.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                parentFragment?.findNavController()?.navigate(HomeFragmentDirections.actionHomeFragmentToTracksFragment(it,arguments?.getParcelable<Auth>("Auth")?:Auth()))
+                viewModel.navigateToTracksDone()
             }
         })
         return binding.root

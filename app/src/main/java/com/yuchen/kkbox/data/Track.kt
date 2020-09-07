@@ -12,5 +12,5 @@ data class Track(
     val url: String,
     val track_number: Int,
     val explicitness: Boolean,
-    @Json(name = "availableTerritories") val available_territories: List<String>
+    @Json(name = "available_territories") val availableTerritories: List<String>
 ) : Parcelable

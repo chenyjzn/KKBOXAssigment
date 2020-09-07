@@ -18,7 +18,14 @@
     </fragment>
     <fragment
         android:id="@+id/tracksFragment"
-        android:name="com.yuchen.kkbox.TracksFragment"
+        android:name="com.yuchen.kkbox.tracks.TracksFragment"
         android:label="fragment_tracks"
-        tools:layout="@layout/fragment_tracks" />
+        tools:layout="@layout/fragment_tracks" >
+        <argument
+            android:name="album"
+            app:argType="com.yuchen.kkbox.data.Album" />
+        <argument
+            android:name="auth"
+            app:argType="com.yuchen.kkbox.data.Auth" />
+    </fragment>
 </navigation>

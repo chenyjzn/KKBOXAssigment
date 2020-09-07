@@ -34,10 +34,13 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
     }
 
     class SongHorizontalHolder(var binding: HolderSongHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(album : Album) {
+        fun bind(album : Album, viewModel: NewViewModel) {
             binding.album = album
             binding.holderSongHorizonalText1.text = album.displayTitle
             binding.holderSongHorizonalText2.text = "${album.displayArtist}@${album.displayDate}"
+            binding.holderSongVerticalImage.setOnClickListener {
+                viewModel.setNavigateToTracks(album)
+            }
             binding.executePendingBindings()
         }
     }
@@ -73,7 +76,7 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
             }
             is SongHorizontalHolder -> {
                 featuredAlbumList?.let {
-                    holder.bind(it[position-3])
+                    holder.bind(it[position-3],viewModel)
                 }
             }
         }

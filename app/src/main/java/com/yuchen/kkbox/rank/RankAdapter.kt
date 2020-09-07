@@ -16,17 +16,20 @@ class RankAdapter(private val viewModel: RankViewModel) : RecyclerView.Adapter<R
     }
 
     inner class SongHorizontalHolder(var binding: HolderSongHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(album : Album) {
+        fun bind(album : Album,viewModel: RankViewModel) {
             binding.album = album
             binding.holderSongHorizonalText1.text = album.displayTitle
             binding.holderSongHorizonalText2.text = "${album.displayArtist}@${album.displayDate}"
+            binding.holderSongVerticalImage.setOnClickListener {
+                viewModel.setNavigateToTracks(album)
+            }
             binding.executePendingBindings()
         }
     }
 
     override fun onBindViewHolder(holder: SongHorizontalHolder, position: Int) {
         albumList?.let {
-            holder.bind(it[position])
+            holder.bind(it[position],viewModel)
         }
     }
 

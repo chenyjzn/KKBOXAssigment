@@ -10,6 +10,8 @@ import com.yuchen.kkbox.databinding.ActivityMainBinding
 import com.yuchen.kkbox.factory.ViewModelFactory
 
 const val LIMIT = 10
+const val LIMIT_500 = 500
+const val OFFSET_0 = 0
 const val TERRITORY = "TW"
 
 class MainActivity : AppCompatActivity() {

@@ -77,6 +77,15 @@ interface KkboxApiService {
         @Query("territory") territory: String,
         @Query("limit") limit: Int
     ): Deferred<AlbumsResult>
+
+    @GET("v1.1/albums/{albumId}/tracks")
+    fun getTracksByAlbum(
+        @Path("albumId") albumId:String,
+        @Header("Authorization") Authorization: String,
+        @Query("territory") territory: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int
+    ): Deferred<TracksResult>
 }
 
 object KkboxApi{
