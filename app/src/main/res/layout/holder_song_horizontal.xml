@@ -5,10 +5,7 @@
 
     <data>
         <variable
-            name="imageUrl"
-            type="String" />
-        <variable
-            name="data"
+            name="album"
             type="com.yuchen.kkbox.data.Album" />
     </data>
 
@@ -25,7 +22,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:bindImage="@{imageUrl}"
+            app:bindImage="@{album.displayCover}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

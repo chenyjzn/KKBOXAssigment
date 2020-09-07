@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         viewModel
         this.findNavController(R.id.nav_host_fragment).setGraph(R.navigation.kkbox_navigation, authBundle)
     }
-
     fun showErrorMessage(message: String){
         Snackbar
             .make(binding.mainConstraint, message, Snackbar.LENGTH_LONG)

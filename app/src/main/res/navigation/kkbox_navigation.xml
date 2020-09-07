@@ -12,5 +12,13 @@
         <argument
             android:name="Auth"
             app:argType="com.yuchen.kkbox.data.Auth" />
+        <action
+            android:id="@+id/action_homeFragment_to_tracksFragment"
+            app:destination="@id/tracksFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/tracksFragment"
+        android:name="com.yuchen.kkbox.TracksFragment"
+        android:label="fragment_tracks"
+        tools:layout="@layout/fragment_tracks" />
 </navigation>

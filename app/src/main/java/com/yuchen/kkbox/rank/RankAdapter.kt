@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yuchen.kkbox.data.Album
 import com.yuchen.kkbox.databinding.HolderSongHorizontalBinding
-import com.yuchen.kkbox.time.convertDateToyyyyMMdd
+import com.yuchen.kkbox.time.convertUpdateAtToyyyyMMdd
 
 class RankAdapter(private val viewModel: RankViewModel) : RecyclerView.Adapter<RankAdapter.SongHorizontalHolder>() {
 
@@ -17,16 +17,9 @@ class RankAdapter(private val viewModel: RankViewModel) : RecyclerView.Adapter<R
 
     inner class SongHorizontalHolder(var binding: HolderSongHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(album : Album) {
-            var imgUrl: String?
-            val imagesSize = album.images.size
-            if (imagesSize==0){
-                imgUrl = null
-            }else{
-                imgUrl = album.images[album.images.lastIndex].url
-            }
-            binding.imageUrl = imgUrl
-            binding.holderSongHorizonalText1.text = album.title
-            binding.holderSongHorizonalText2.text = "${album.owner.name}@${convertDateToyyyyMMdd(album.updatedAt)}"
+            binding.album = album
+            binding.holderSongHorizonalText1.text = album.displayTitle
+            binding.holderSongHorizonalText2.text = "${album.displayArtist}@${album.displayDate}"
             binding.executePendingBindings()
         }
     }

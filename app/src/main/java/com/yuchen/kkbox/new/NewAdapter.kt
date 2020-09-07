@@ -2,20 +2,17 @@ package com.yuchen.kkbox.new
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yuchen.kkbox.data.Album
-import com.yuchen.kkbox.data.NewRelease
 import com.yuchen.kkbox.databinding.HolderNewReleaseBinding
 import com.yuchen.kkbox.databinding.HolderSongHorizontalBinding
 import com.yuchen.kkbox.databinding.HolderTitleBinding
-import com.yuchen.kkbox.time.convertDateToyyyyMMdd
 
 class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var featuredAlbumList: List<Album>? = null
-    private var newReleaseList: List<NewRelease>? = null
+    private var newReleaseAlbumList: List<Album>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -38,22 +35,15 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
 
     class SongHorizontalHolder(var binding: HolderSongHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(album : Album) {
-            var imgUrl: String?
-            val imagesSize = album.images.size
-            if (imagesSize==0){
-                imgUrl = null
-            }else{
-                imgUrl = album.images[album.images.lastIndex].url
-            }
-            binding.imageUrl = imgUrl
-            binding.holderSongHorizonalText1.text = album.title
-            binding.holderSongHorizonalText2.text = "${album.owner.name}@${convertDateToyyyyMMdd(album.updatedAt)}"
+            binding.album = album
+            binding.holderSongHorizonalText1.text = album.displayTitle
+            binding.holderSongHorizonalText2.text = "${album.displayArtist}@${album.displayDate}"
             binding.executePendingBindings()
         }
     }
 
     class NewReleaseHolder(var binding: HolderNewReleaseBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(newReleaseList : List<NewRelease>, viewModel: NewViewModel) {
+        fun bind(newReleaseList : List<Album>, viewModel: NewViewModel) {
             val adapter = NewReleaseAdapter(viewModel)
             binding.holderNewReleaseRecycler.adapter = adapter
             binding.holderNewReleaseRecycler.layoutManager = LinearLayoutManager(binding.holderNewReleaseRecycler.context, LinearLayoutManager.HORIZONTAL,false)
@@ -77,7 +67,7 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
                 holder.bind(position)
             }
             is NewReleaseHolder -> {
-                newReleaseList?.let {
+                newReleaseAlbumList?.let {
                     holder.bind(it,viewModel)
                 }
             }
@@ -100,8 +90,8 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
         featuredAlbumList = list
     }
 
-    fun submitNewReleaseList(list: List<NewRelease>) {
-        newReleaseList = list
+    fun submitNewReleaseList(list: List<Album>) {
+        newReleaseAlbumList = list
     }
 
     companion object{

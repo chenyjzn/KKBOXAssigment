@@ -76,7 +76,7 @@ interface KkboxApiService {
         @Header("Authorization") Authorization: String,
         @Query("territory") territory: String,
         @Query("limit") limit: Int
-    ): Deferred<NewReleaseResult>
+    ): Deferred<AlbumsResult>
 }
 
 object KkboxApi{

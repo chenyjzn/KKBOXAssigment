@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class NewReleaseResult(
-    val data: List<NewRelease>,
+data class TracksResult(
+    val data: List<Track>,
     val paging: Paging,
     val summary: Summary
 ) : Parcelable
