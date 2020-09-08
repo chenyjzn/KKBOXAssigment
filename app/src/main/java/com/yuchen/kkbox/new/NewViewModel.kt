@@ -41,6 +41,10 @@ class NewViewModel(private val auth: Auth) : ViewModel() {
     val navigateToTracks: LiveData<Album>
         get() = _navigateToTracks
 
+    private val _featuredList = MutableLiveData<List<Album>>()
+    val featuredList: LiveData<List<Album>>
+        get() = _featuredList
+
     init {
         getCategoriesList()
         getFeaturedList()
@@ -97,6 +101,10 @@ class NewViewModel(private val auth: Auth) : ViewModel() {
                 _loadApiStatus.value = LoadApiStatus.DONE
             }
         }
+    }
+
+    fun setFeaturedList(list : List<Album>){
+        _featuredList.value = _featuredList.value.orEmpty() + list
     }
 
     fun setNavigateToTracks(album: Album){

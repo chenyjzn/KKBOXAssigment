@@ -35,7 +35,7 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
 
     class SongHorizontalHolder(var binding: HolderSongHorizontalBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(album : Album, viewModel: NewViewModel) {
-            binding.album = album
+            binding.imgUrl = album.displayCover
             binding.holderSongHorizonalText1.text = album.displayTitle
             binding.holderSongHorizonalText2.text = "${album.displayArtist}@${album.displayDate}"
             binding.holderSongVerticalImage.setOnClickListener {
@@ -87,7 +87,7 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
     }
 
     fun submitFeaturedAlbumList(list: List<Album>) {
-        featuredAlbumList = featuredAlbumList + list
+        featuredAlbumList = list
     }
 
     fun submitNewReleaseList(list: List<Album>) {

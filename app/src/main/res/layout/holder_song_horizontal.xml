@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="album"
-            type="com.yuchen.kkbox.data.Album" />
+            name="imgUrl"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:bindImage="@{album.displayCover}"
+            app:bindImage="@{imgUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

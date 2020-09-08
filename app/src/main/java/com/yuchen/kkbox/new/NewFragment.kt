@@ -42,7 +42,12 @@ class NewFragment : Fragment() {
         })
         viewModel.featuredResult.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitFeaturedAlbumList(it.data)
+                viewModel.setFeaturedList(it.data)
+            }
+        })
+        viewModel.featuredList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitFeaturedAlbumList(it)
                 adapter.notifyDataSetChanged()
             }
         })
