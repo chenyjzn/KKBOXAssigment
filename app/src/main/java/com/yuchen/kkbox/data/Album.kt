@@ -49,4 +49,8 @@ data class Album(
         } else {
             images[images.lastIndex].url
         }
+
+    fun isFromNewRelease():Boolean{
+        return title == null
+    }
 }

@@ -11,7 +11,7 @@ import com.yuchen.kkbox.databinding.HolderTitleBinding
 
 class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var featuredAlbumList: List<Album>? = null
+    private var featuredAlbumList: List<Album> = listOf()
     private var newReleaseAlbumList: List<Album>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -83,14 +83,11 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
     }
 
     override fun getItemCount(): Int {
-        featuredAlbumList?.let {
-            return it.size + 3
-        }
-        return 3
+        return featuredAlbumList.size + 3
     }
 
     fun submitFeaturedAlbumList(list: List<Album>) {
-        featuredAlbumList = list
+        featuredAlbumList = featuredAlbumList + list
     }
 
     fun submitNewReleaseList(list: List<Album>) {

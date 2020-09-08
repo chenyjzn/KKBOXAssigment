@@ -107,6 +107,31 @@ class NewViewModel(private val auth: Auth) : ViewModel() {
         _navigateToTracks.value = null
     }
 
+    fun hasPaging():String?{
+        _featuredResult.value?.paging?.next?.let {
+            return it
+        }
+        return null
+    }
+
+    fun getFeaturedPaging(url: String){
+        coroutineScope.launch {
+            val featuredPagingDeferred = KkboxApi.kkboxApiService.getPagingDataByFullUrl(
+                url,
+                "${auth.tokenType} ${auth.accessToken}"
+            )
+            try {
+                _loadApiStatus.value = LoadApiStatus.LOADING
+                val featuredPaging=featuredPagingDeferred.await()
+                _loadApiStatus.value = LoadApiStatus.DONE
+                _featuredResult.value = featuredPaging
+            }catch (t:Throwable){
+                _loadApiStatus.value = LoadApiStatus.ERROR(t.toString())
+                _loadApiStatus.value = LoadApiStatus.DONE
+            }
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()

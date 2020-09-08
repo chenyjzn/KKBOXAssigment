@@ -9,10 +9,7 @@ import com.yuchen.kkbox.TERRITORY
 import com.yuchen.kkbox.data.*
 import com.yuchen.kkbox.network.KkboxApi
 import com.yuchen.kkbox.network.LoadApiStatus
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class TracksViewModel(private val auth: Auth,val album: Album) : ViewModel() {
 
@@ -33,9 +30,23 @@ class TracksViewModel(private val auth: Auth,val album: Album) : ViewModel() {
 
     private fun getTracksList(){
         coroutineScope.launch {
-            val tracksResultDeferred = KkboxApi.kkboxApiService.getTracksByAlbum(
-                album.id, "${auth.tokenType} ${auth.accessToken}", TERRITORY, OFFSET_0, LIMIT_500
-            )
+            val tracksResultDeferred = if (album.isFromNewRelease()) {
+                KkboxApi.kkboxApiService.getTracksByAlbum(
+                    album.id,
+                    "${auth.tokenType} ${auth.accessToken}",
+                    TERRITORY,
+                    OFFSET_0,
+                    LIMIT_500
+                )
+            } else {
+                KkboxApi.kkboxApiService.getTracksByChart(
+                    album.id,
+                    "${auth.tokenType} ${auth.accessToken}",
+                    TERRITORY,
+                    OFFSET_0,
+                    LIMIT_500
+                )
+            }
             try {
                 _loadApiStatus.value = LoadApiStatus.LOADING
                 val tracksResult=tracksResultDeferred.await()

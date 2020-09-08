@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.yuchen.kkbox.MainActivity
 import com.yuchen.kkbox.data.Auth
 import com.yuchen.kkbox.databinding.FragmentNewBinding
@@ -66,6 +67,16 @@ class NewFragment : Fragment() {
                 viewModel.navigateToTracksDone()
             }
         })
+        binding.newRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val url = viewModel.hasPaging()
+                if ( url != null && !recyclerView.canScrollVertically(1)) {
+                    viewModel.getFeaturedPaging(url)
+                }
+            }
+        })
+
         return binding.root
     }
 }

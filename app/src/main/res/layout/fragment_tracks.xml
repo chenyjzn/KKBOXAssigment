@@ -12,6 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tracks_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <ProgressBar
             android:id="@+id/tracks_progress"
             style="?android:attr/progressBarStyle"
@@ -22,9 +27,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tracks_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

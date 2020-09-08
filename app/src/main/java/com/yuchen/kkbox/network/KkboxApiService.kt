@@ -3,13 +3,18 @@ package com.yuchen.kkbox.network
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.yuchen.kkbox.data.*
+import com.yuchen.kkbox.data.AlbumsResult
+import com.yuchen.kkbox.data.Auth
+import com.yuchen.kkbox.data.CategoriesResult
+import com.yuchen.kkbox.data.TracksResult
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+
 
 private const val KKBOX_AUTH_API = "https://account.kkbox.com/"
 private const val KKBOX_API = "https://api.kkbox.com/"
@@ -57,6 +62,12 @@ interface KkboxApiService {
         @Query("territory") territory: String
     ): Deferred<AlbumsResult>
 
+    @GET
+    fun getPagingDataByFullUrl(
+        @Url url: String?,
+        @Header("Authorization") Authorization: String
+    ): Deferred<AlbumsResult>
+
     @GET("v1.1/featured-playlists")
     fun getFeaturedPlaylists(
         @Header("Authorization") Authorization: String,
@@ -80,6 +91,15 @@ interface KkboxApiService {
 
     @GET("v1.1/albums/{albumId}/tracks")
     fun getTracksByAlbum(
+        @Path("albumId") albumId:String,
+        @Header("Authorization") Authorization: String,
+        @Query("territory") territory: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int
+    ): Deferred<TracksResult>
+
+    @GET("v1.1/charts/{albumId}/tracks")
+    fun getTracksByChart(
         @Path("albumId") albumId:String,
         @Header("Authorization") Authorization: String,
         @Query("territory") territory: String,

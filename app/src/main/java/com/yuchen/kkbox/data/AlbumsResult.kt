@@ -5,7 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AlbumsResult(
-    val data: List<Album>,
-    val paging: Paging,
-    val summary: Summary
+    val greeting: String = "No greeting data",
+    val data: List<Album> = listOf(),
+    val paging: Paging? = null,
+    val summary: Summary? = null
 ) : Parcelable
