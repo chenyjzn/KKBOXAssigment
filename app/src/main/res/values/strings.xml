@@ -7,6 +7,9 @@
     <string name="new_featured_title"><u>近期精選歌單</u></string>
     <string name="tracks_title"><u>歌曲列表</u></string>
     <string name="internet_not_connected">網路沒連接</string>
+    <string name="checking_auth">確認權限中</string>
+    <string name="auth_fail">確認權限失敗</string>
+    <string name="auth_success">確認權限成功</string>
     <string-array name="home_pager">
         <item>新發行</item>
         <item>排行榜</item>

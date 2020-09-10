@@ -10,9 +10,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.yuchen.kkbox.databinding.ActivityAuthBinding
 import com.yuchen.kkbox.ext.getVmFactory
-import com.yuchen.kkbox.factory.ViewModelFactory
 import com.yuchen.kkbox.network.LoadApiStatus
-
 
 class AuthActivity : AppCompatActivity() {
     lateinit var binding: ActivityAuthBinding
@@ -35,12 +33,15 @@ class AuthActivity : AppCompatActivity() {
                 when(it){
                     is LoadApiStatus.LOADING -> {
                         binding.authProgress.visibility = View.VISIBLE
+                        binding.authText.text = resources.getString(R.string.checking_auth)
                     }
                     is LoadApiStatus.DONE -> {
                         binding.authProgress.visibility = View.INVISIBLE
+                        binding.authText.text = resources.getString(R.string.auth_success)
                     }
                     is LoadApiStatus.ERROR -> {
                         showErrorMessage(it.message)
+                        binding.authText.text = resources.getString(R.string.auth_fail)
                     }
                 }
             }
