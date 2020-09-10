@@ -8,7 +8,6 @@ import com.yuchen.kkbox.OFFSET_0
 import com.yuchen.kkbox.TERRITORY
 import com.yuchen.kkbox.data.*
 import com.yuchen.kkbox.data.source.KkboxRepository
-import com.yuchen.kkbox.network.KkboxApi
 import com.yuchen.kkbox.network.LoadApiStatus
 import kotlinx.coroutines.*
 
@@ -31,32 +30,24 @@ class TracksViewModel(private val kkboxRepository: KkboxRepository, private val 
 
     private fun getTracksList(){
         coroutineScope.launch {
-            val tracksResultDeferred = if (album.isFromNewRelease()) {
-                KkboxApi.kkboxApiService.getTracksByAlbum(
-                    album.id,
-                    "${auth.tokenType} ${auth.accessToken}",
-                    TERRITORY,
-                    OFFSET_0,
-                    LIMIT_500
-                )
-            } else {
-                KkboxApi.kkboxApiService.getTracksByChart(
-                    album.id,
-                    "${auth.tokenType} ${auth.accessToken}",
-                    TERRITORY,
-                    OFFSET_0,
-                    LIMIT_500
-                )
+            _loadApiStatus.value = LoadApiStatus.LOADING
+            val result =  if (album.isFromNewRelease()) {
+                kkboxRepository.getTracksByAlbum(album,auth, TERRITORY, OFFSET_0, LIMIT_500)
+            }else{
+                kkboxRepository.getTracksByChart(album,auth, TERRITORY, OFFSET_0, LIMIT_500)
             }
-            try {
-                _loadApiStatus.value = LoadApiStatus.LOADING
-                val tracksResult=tracksResultDeferred.await()
-                _loadApiStatus.value = LoadApiStatus.DONE
-                _tracksResult.value = tracksResult
-            }catch (t:Throwable){
-                _loadApiStatus.value = LoadApiStatus.ERROR(t.toString())
-                _loadApiStatus.value = LoadApiStatus.DONE
+            when(result){
+                is RepoResult.Success -> {
+                    _tracksResult.value = result.data
+                }
+                is RepoResult.Err -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.error)
+                }
+                is RepoResult.Except -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.exception.toString())
+                }
             }
+            _loadApiStatus.value = LoadApiStatus.DONE
         }
     }
 

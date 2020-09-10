@@ -8,7 +8,6 @@ import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.yuchen.kkbox.databinding.ActivityMainBinding
 import com.yuchen.kkbox.ext.getVmFactory
-import com.yuchen.kkbox.factory.ViewModelFactory
 
 const val LIMIT = 10
 const val LIMIT_500 = 500

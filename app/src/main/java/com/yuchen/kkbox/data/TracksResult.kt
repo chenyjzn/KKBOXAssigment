@@ -7,5 +7,6 @@ import kotlinx.android.parcel.Parcelize
 data class TracksResult(
     val data: List<Track>,
     val paging: Paging,
-    val summary: Summary
+    val summary: Summary,
+    val error: String? = null
 ) : Parcelable

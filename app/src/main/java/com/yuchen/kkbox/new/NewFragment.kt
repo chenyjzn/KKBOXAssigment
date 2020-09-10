@@ -78,7 +78,7 @@ class NewFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 val url = viewModel.hasPaging()
-                if ( url != null && !recyclerView.canScrollVertically(1)) {
+                if (url != null && !recyclerView.canScrollVertically(1) && !viewModel.isLoading()) {
                     viewModel.getFeaturedPaging(url)
                 }
             }

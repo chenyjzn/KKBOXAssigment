@@ -5,12 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yuchen.kkbox.LIMIT
 import com.yuchen.kkbox.TERRITORY
-import com.yuchen.kkbox.data.Album
-import com.yuchen.kkbox.data.Auth
-import com.yuchen.kkbox.data.CategoriesResult
-import com.yuchen.kkbox.data.AlbumsResult
+import com.yuchen.kkbox.data.*
 import com.yuchen.kkbox.data.source.KkboxRepository
-import com.yuchen.kkbox.network.KkboxApi
 import com.yuchen.kkbox.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,54 +49,64 @@ class NewViewModel(private val kkboxRepository: KkboxRepository, private val aut
 
     private fun getCategoriesList() {
         coroutineScope.launch {
-            val categoriesResultDeferred = KkboxApi.kkboxApiService.getCategories(
-                "${auth.tokenType} ${auth.accessToken}", TERRITORY
-            )
-            try {
-                _loadApiStatus.value = LoadApiStatus.LOADING
-                val categoriesResult = categoriesResultDeferred.await()
-                _loadApiStatus.value = LoadApiStatus.DONE
-                _categoriesResult.value = categoriesResult
-            } catch (t: Throwable) {
-                _loadApiStatus.value = LoadApiStatus.ERROR(t.toString())
-                _loadApiStatus.value = LoadApiStatus.DONE
+            _loadApiStatus.value = LoadApiStatus.LOADING
+            val result = kkboxRepository.getCategories(auth,TERRITORY)
+            when(result){
+                is RepoResult.Success -> {
+                    _categoriesResult.value = result.data
+                }
+                is RepoResult.Err -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.error)
+                }
+                is RepoResult.Except -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.exception.toString())
+                }
             }
+            _loadApiStatus.value = LoadApiStatus.DONE
         }
     }
 
     fun getNewReleaseAlbumsByCategories(categories:String){
         coroutineScope.launch {
-            val newReleaseAlbumsDeferred = KkboxApi.kkboxApiService.getNewReleaseAlbumsByCategories(
-                categories,"${auth.tokenType} ${auth.accessToken}", TERRITORY, LIMIT
+            _loadApiStatus.value = LoadApiStatus.LOADING
+            val result = kkboxRepository.getNewReleaseAlbumsByCategories(
+                categories, auth, TERRITORY,
+                LIMIT
             )
-            try {
-                _loadApiStatus.value = LoadApiStatus.LOADING
-                val newReleaseAlbums=newReleaseAlbumsDeferred.await()
-                _loadApiStatus.value = LoadApiStatus.DONE
-                _newReleaseResult.value = newReleaseAlbums
-            }catch (t:Throwable){
-                _loadApiStatus.value = LoadApiStatus.ERROR(t.toString())
-                _loadApiStatus.value = LoadApiStatus.DONE
+            when(result){
+                is RepoResult.Success -> {
+                    _newReleaseResult.value = result.data
+                }
+                is RepoResult.Err -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.error)
+                }
+                is RepoResult.Except -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.exception.toString())
+                }
             }
+            _loadApiStatus.value = LoadApiStatus.DONE
         }
     }
 
     private fun getFeaturedList(){
         coroutineScope.launch {
-            val featuredListDeferred = KkboxApi.kkboxApiService.getFeaturedPlaylists(
-                "${auth.tokenType} ${auth.accessToken}",
-                TERRITORY,
+            _loadApiStatus.value = LoadApiStatus.LOADING
+            val result = kkboxRepository.getFeaturedPlaylists(
+                auth, TERRITORY,
                 LIMIT
             )
-            try {
-                _loadApiStatus.value = LoadApiStatus.LOADING
-                val featuredList=featuredListDeferred.await()
-                _loadApiStatus.value = LoadApiStatus.DONE
-                _featuredResult.value = featuredList
-            }catch (t:Throwable){
-                _loadApiStatus.value = LoadApiStatus.ERROR(t.toString())
-                _loadApiStatus.value = LoadApiStatus.DONE
+            when(result){
+                is RepoResult.Success -> {
+                    _featuredResult.value = result.data
+                }
+                is RepoResult.Err -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.error)
+                }
+                is RepoResult.Except -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.exception.toString())
+                }
             }
+            _loadApiStatus.value = LoadApiStatus.DONE
         }
     }
 
@@ -123,21 +129,28 @@ class NewViewModel(private val kkboxRepository: KkboxRepository, private val aut
         return null
     }
 
+    fun isLoading():Boolean{
+        return _loadApiStatus.value == LoadApiStatus.LOADING
+    }
+
     fun getFeaturedPaging(url: String){
         coroutineScope.launch {
-            val featuredPagingDeferred = KkboxApi.kkboxApiService.getPagingDataByFullUrl(
-                url,
-                "${auth.tokenType} ${auth.accessToken}"
+            _loadApiStatus.value = LoadApiStatus.LOADING
+            val result = kkboxRepository.getPagingDataByFullUrl(
+                url,auth
             )
-            try {
-                _loadApiStatus.value = LoadApiStatus.LOADING
-                val featuredPaging=featuredPagingDeferred.await()
-                _loadApiStatus.value = LoadApiStatus.DONE
-                _featuredResult.value = featuredPaging
-            }catch (t:Throwable){
-                _loadApiStatus.value = LoadApiStatus.ERROR(t.toString())
-                _loadApiStatus.value = LoadApiStatus.DONE
+            when(result){
+                is RepoResult.Success -> {
+                    _featuredResult.value = result.data
+                }
+                is RepoResult.Err -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.error)
+                }
+                is RepoResult.Except -> {
+                    _loadApiStatus.value = LoadApiStatus.ERROR(result.exception.toString())
+                }
             }
+            _loadApiStatus.value = LoadApiStatus.DONE
         }
     }
 

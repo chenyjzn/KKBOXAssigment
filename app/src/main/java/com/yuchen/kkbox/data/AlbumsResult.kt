@@ -8,5 +8,6 @@ data class AlbumsResult(
     val greeting: String = "No greeting data",
     val data: List<Album> = listOf(),
     val paging: Paging? = null,
-    val summary: Summary? = null
+    val summary: Summary? = null,
+    val error: String? = null
 ) : Parcelable
