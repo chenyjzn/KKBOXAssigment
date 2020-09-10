@@ -9,13 +9,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.yuchen.kkbox.databinding.ActivityAuthBinding
+import com.yuchen.kkbox.ext.getVmFactory
 import com.yuchen.kkbox.factory.ViewModelFactory
 import com.yuchen.kkbox.network.LoadApiStatus
 
 
 class AuthActivity : AppCompatActivity() {
     lateinit var binding: ActivityAuthBinding
-    val viewModel: AuthViewModel by viewModels{ ViewModelFactory() }
+    val viewModel: AuthViewModel by viewModels{ getVmFactory() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auth)

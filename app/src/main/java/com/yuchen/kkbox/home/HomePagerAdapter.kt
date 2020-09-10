@@ -8,26 +8,31 @@ import com.yuchen.kkbox.data.Auth
 import com.yuchen.kkbox.new.NewFragment
 import com.yuchen.kkbox.rank.RankFragment
 
-class HomePagerAdapter(fm: FragmentManager,private val bundle: Bundle) : FragmentStatePagerAdapter(fm) {
-    override fun getCount(): Int = 2
+class HomePagerAdapter(fm: FragmentManager,private val bundle: Bundle,private val homePagerArray:Array<String>) : FragmentStatePagerAdapter(fm) {
+    override fun getCount(): Int = PAGER_SIZE
     override fun getItem(i: Int): Fragment {
         val newFragment = NewFragment()
         val rankFragment = RankFragment()
         newFragment.arguments = bundle
         rankFragment.arguments = bundle
         return when(i){
-            0 -> newFragment
-            1 -> rankFragment
+            NEW -> newFragment
+            RANK -> rankFragment
             else -> throw IllegalAccessError("Out of pager pos")
         }
     }
 
     override fun getPageTitle(position: Int): CharSequence {
         return when (position) {
-            0 -> "新發行"
-            1 -> "排行榜"
+            NEW -> homePagerArray[NEW]
+            RANK -> homePagerArray[RANK]
             else -> throw IllegalAccessError("Out of pager pos")
         }
     }
 
+    companion object{
+        const val NEW = 0
+        const val RANK = 1
+        const val PAGER_SIZE = 2
+    }
 }

@@ -7,6 +7,7 @@ import com.yuchen.kkbox.TERRITORY
 import com.yuchen.kkbox.data.Album
 import com.yuchen.kkbox.data.Auth
 import com.yuchen.kkbox.data.AlbumsResult
+import com.yuchen.kkbox.data.source.KkboxRepository
 import com.yuchen.kkbox.network.KkboxApi
 import com.yuchen.kkbox.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class RankViewModel(private val auth: Auth) : ViewModel() {
+class RankViewModel(private val kkboxRepository: KkboxRepository, private val auth: Auth) : ViewModel() {
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)

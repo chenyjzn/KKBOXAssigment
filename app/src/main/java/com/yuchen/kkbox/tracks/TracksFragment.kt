@@ -11,13 +11,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yuchen.kkbox.MainActivity
 import com.yuchen.kkbox.databinding.FragmentTracksBinding
+import com.yuchen.kkbox.ext.getVmFactory
 import com.yuchen.kkbox.factory.ViewModelAuthAlbumFactory
 import com.yuchen.kkbox.network.LoadApiStatus
 
 class TracksFragment : Fragment() {
     lateinit var binding: FragmentTracksBinding
     val viewModel: TracksViewModel by viewModels {
-        ViewModelAuthAlbumFactory(
+        getVmFactory(
             TracksFragmentArgs.fromBundle(requireArguments()).auth,
             TracksFragmentArgs.fromBundle(requireArguments()).album
         )

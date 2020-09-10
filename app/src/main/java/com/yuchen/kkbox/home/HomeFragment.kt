@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import com.yuchen.kkbox.R
+
 import com.yuchen.kkbox.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -17,7 +19,8 @@ class HomeFragment : Fragment() {
     ): View? {
         val binding = FragmentHomeBinding.inflate(inflater)
         val args by navArgs<HomeFragmentArgs>()
-        homePagerAdapter = HomePagerAdapter(childFragmentManager,args.toBundle())
+        val homePagerArray = resources.getStringArray(R.array.home_pager)
+        homePagerAdapter = HomePagerAdapter(childFragmentManager,args.toBundle(),homePagerArray)
         binding.homeTab.setupWithViewPager(binding.homeViewPager)
         binding.homeViewPager.adapter = homePagerAdapter
         return binding.root

@@ -9,18 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yuchen.kkbox.MainActivity
 import com.yuchen.kkbox.data.Auth
 import com.yuchen.kkbox.databinding.FragmentNewBinding
+import com.yuchen.kkbox.ext.getVmFactory
 import com.yuchen.kkbox.factory.ViewModelAuthFactory
 import com.yuchen.kkbox.home.HomeFragmentDirections
 import com.yuchen.kkbox.network.LoadApiStatus
 
 class NewFragment : Fragment() {
     lateinit var binding: FragmentNewBinding
-    val viewModel: NewViewModel by viewModels{ ViewModelAuthFactory(arguments?.getParcelable<Auth>("Auth")?:Auth()) }
+    val viewModel: NewViewModel by viewModels{ getVmFactory(arguments?.getParcelable<Auth>("Auth")?:Auth()) }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentNewBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -37,7 +39,7 @@ class NewFragment : Fragment() {
         viewModel.newReleaseResult.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitNewReleaseList(it.data)
-                adapter.notifyItemChanged(1)
+                adapter.notifyItemChanged(NEW_RELEASE_BODY)
             }
         })
         viewModel.featuredResult.observe(viewLifecycleOwner, Observer {
@@ -83,5 +85,12 @@ class NewFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    companion object{
+        const val NEW_RELEASE_TITLE = 0
+        const val NEW_RELEASE_BODY = 1
+        const val NEW_FEATURED_TITLE = 2
+        const val NEW_FEATURED_BODY = 3
     }
 }

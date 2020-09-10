@@ -7,11 +7,12 @@ import com.yuchen.kkbox.LIMIT_500
 import com.yuchen.kkbox.OFFSET_0
 import com.yuchen.kkbox.TERRITORY
 import com.yuchen.kkbox.data.*
+import com.yuchen.kkbox.data.source.KkboxRepository
 import com.yuchen.kkbox.network.KkboxApi
 import com.yuchen.kkbox.network.LoadApiStatus
 import kotlinx.coroutines.*
 
-class TracksViewModel(private val auth: Auth,val album: Album) : ViewModel() {
+class TracksViewModel(private val kkboxRepository: KkboxRepository, private val auth: Auth, val album: Album) : ViewModel() {
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)

@@ -9,17 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yuchen.kkbox.MainActivity
 import com.yuchen.kkbox.data.Auth
 import com.yuchen.kkbox.databinding.FragmentRankBinding
+import com.yuchen.kkbox.ext.getVmFactory
 import com.yuchen.kkbox.factory.ViewModelAuthFactory
 import com.yuchen.kkbox.home.HomeFragmentDirections
 import com.yuchen.kkbox.network.LoadApiStatus
 
 class RankFragment : Fragment() {
     lateinit var binding: FragmentRankBinding
-    val viewModel: RankViewModel by viewModels{ ViewModelAuthFactory(arguments?.getParcelable<Auth>("Auth")?:Auth()) }
+    val viewModel: RankViewModel by viewModels{ getVmFactory(arguments?.getParcelable<Auth>("Auth")?:Auth()) }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentRankBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner

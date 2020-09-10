@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yuchen.kkbox.data.Auth
+import com.yuchen.kkbox.data.source.KkboxRepository
 import com.yuchen.kkbox.network.KkboxAuthApi
 import com.yuchen.kkbox.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class AuthViewModel: ViewModel() {
+class AuthViewModel(private val kkboxRepository: KkboxRepository): ViewModel() {
     private val viewModelJob= Job()
     private val coroutineScope= CoroutineScope(viewModelJob+ Dispatchers.Main)
 

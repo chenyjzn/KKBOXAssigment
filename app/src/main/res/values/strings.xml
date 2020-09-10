@@ -1,6 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">KKBOX</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_rls_title"><u>最近發行專輯</u></string>
+    <string name="new_featured_title"><u>近期精選歌單</u></string>
+    <string name="tracks_title"><u>歌曲列表</u></string>
+    <string-array name="home_pager">
+        <item>新發行</item>
+        <item>排行榜</item>
+    </string-array>
 </resources>

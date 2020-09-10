@@ -1,13 +1,19 @@
 package com.yuchen.kkbox.new
 
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yuchen.kkbox.R
 import com.yuchen.kkbox.data.Album
 import com.yuchen.kkbox.databinding.HolderNewReleaseBinding
 import com.yuchen.kkbox.databinding.HolderSongHorizontalBinding
 import com.yuchen.kkbox.databinding.HolderTitleBinding
+import com.yuchen.kkbox.new.NewFragment.Companion.NEW_FEATURED_TITLE
+import com.yuchen.kkbox.new.NewFragment.Companion.NEW_RELEASE_TITLE
+
 
 class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -25,10 +31,11 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
 
     class TitleHolder(var binding: HolderTitleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            if (position == 0)
-                binding.holderTitleText.text = "最近發行專輯"
-            if (position == 2)
-                binding.holderTitleText.text = "近期精選歌單"
+            if (position == NEW_RELEASE_TITLE) {
+                binding.holderTitleText.text = binding.holderTitleText.resources.getString(R.string.new_rls_title)
+            }
+            if (position == NEW_FEATURED_TITLE)
+                binding.holderTitleText.text = binding.holderTitleText.resources.getString(R.string.new_featured_title)
             binding.executePendingBindings()
         }
     }

@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.yuchen.kkbox.databinding.ActivityMainBinding
+import com.yuchen.kkbox.ext.getVmFactory
 import com.yuchen.kkbox.factory.ViewModelFactory
 
 const val LIMIT = 10
@@ -16,7 +17,7 @@ const val TERRITORY = "TW"
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    val viewModel: MainViewModel by viewModels{ ViewModelFactory() }
+    val viewModel: MainViewModel by viewModels{ getVmFactory() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)

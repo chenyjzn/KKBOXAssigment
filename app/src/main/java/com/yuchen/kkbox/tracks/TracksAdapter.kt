@@ -3,6 +3,7 @@ package com.yuchen.kkbox.tracks
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.yuchen.kkbox.R
 import com.yuchen.kkbox.data.Album
 import com.yuchen.kkbox.data.Track
 import com.yuchen.kkbox.databinding.HolderCoverBinding
@@ -24,7 +25,7 @@ class TracksAdapter(private val viewModel: TracksViewModel) : RecyclerView.Adapt
 
     class TitleHolder(var binding: HolderTitleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            binding.holderTitleText.text = "歌曲列表"
+            binding.holderTitleText.text = binding.holderTitleText.resources.getString(R.string.tracks_title)
             binding.executePendingBindings()
         }
     }
