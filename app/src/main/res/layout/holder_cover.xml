@@ -18,9 +18,11 @@
             android:id="@+id/holder_cover_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:bindImage="@{imgUrl}"
-            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:srcCompat="@drawable/ic_image_black_24dp"
             tools:ignore="VectorDrawableCompat" />
     </androidx.constraintlayout.widget.ConstraintLayout>
