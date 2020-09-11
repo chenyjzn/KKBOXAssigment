@@ -7,7 +7,6 @@ import com.yuchen.kkbox.data.Auth
 import com.yuchen.kkbox.data.RepoResult
 import com.yuchen.kkbox.data.source.KkboxRepository
 import com.yuchen.kkbox.network.LoadApiStatus
-import com.yuchen.kkbox.util.getString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

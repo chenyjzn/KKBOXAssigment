@@ -2,6 +2,7 @@ package com.yuchen.kkbox
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ class AuthActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auth)
         viewModel.auth.observe(this, Observer {
             it?.let {
+                binding.authText.text = resources.getString(R.string.auth_success)
                 val bundle = Bundle()
                 bundle.putParcelable("Auth", it)
                 val intent = Intent(baseContext, MainActivity::class.java)
@@ -37,7 +39,6 @@ class AuthActivity : AppCompatActivity() {
                     }
                     is LoadApiStatus.DONE -> {
                         binding.authProgress.visibility = View.INVISIBLE
-                        binding.authText.text = resources.getString(R.string.auth_success)
                     }
                     is LoadApiStatus.ERROR -> {
                         showErrorMessage(it.message)

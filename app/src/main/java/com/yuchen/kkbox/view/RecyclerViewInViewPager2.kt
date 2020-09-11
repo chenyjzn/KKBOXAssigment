@@ -6,7 +6,6 @@ import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.abs
 
-
 class RecyclerViewInViewPager2 : RecyclerView {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)

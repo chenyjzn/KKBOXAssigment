@@ -1,6 +1,5 @@
 package com.yuchen.kkbox.new
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -39,9 +38,6 @@ class NewAdapter(private val viewModel: NewViewModel) : ListAdapter<DataItem, Re
             binding.imgUrl = album.displayCover
             binding.holderSongHorizonalText1.text = album.displayTitle
             binding.holderSongHorizonalText2.text = "${album.displayArtist}@${album.displayDate}"
-            binding.holderSongVerticalImage.setOnClickListener {
-                viewModel.setNavigateToTracks(album)
-            }
             binding.executePendingBindings()
         }
     }
@@ -82,7 +78,11 @@ class NewAdapter(private val viewModel: NewViewModel) : ListAdapter<DataItem, Re
                 holder.bind((getItem(position) as DataItem.NewReleaseList).albums,viewModel)
             }
             is SongHorizontalHolder -> {
-                holder.bind((getItem(position) as DataItem.Featured).album,viewModel)
+                val album = (getItem(position) as DataItem.Featured).album
+                holder.bind(album,viewModel)
+                holder.itemView.setOnClickListener {
+                    viewModel.setNavigateToTracks(album)
+                }
             }
         }
     }
