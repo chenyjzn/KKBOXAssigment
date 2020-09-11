@@ -10,6 +10,7 @@
     <string name="checking_auth">確認權限中</string>
     <string name="auth_fail">確認權限失敗</string>
     <string name="auth_success">確認權限成功</string>
+    <string name="categories_result_fail">Get categories result fail</string>
     <string-array name="home_pager">
         <item>新發行</item>
         <item>排行榜</item>

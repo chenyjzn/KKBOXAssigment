@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yuchen.kkbox.LIMIT
+import com.yuchen.kkbox.R
 import com.yuchen.kkbox.TERRITORY
 import com.yuchen.kkbox.data.*
 import com.yuchen.kkbox.data.source.KkboxRepository
 import com.yuchen.kkbox.network.LoadApiStatus
+import com.yuchen.kkbox.util.getString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,13 +40,101 @@ class NewViewModel(private val kkboxRepository: KkboxRepository, private val aut
     val navigateToTracks: LiveData<Album>
         get() = _navigateToTracks
 
-    private val _featuredList = MutableLiveData<List<Album>>()
-    val featuredList: LiveData<List<Album>>
-        get() = _featuredList
+    private val _dataItemList = MutableLiveData<List<DataItem>>()
+    val dataItemList: LiveData<List<DataItem>>
+        get() = _dataItemList
+
+    var nextPagingUrl:Paging? = null
+
+    private var isFeaturedFromPaging = false
+    private var isFeaturedInit = false
+    private var isNewReleaseInit = false
 
     init {
         getCategoriesList()
         getFeaturedList()
+    }
+
+    fun setCategoriesResultDone(){
+        _categoriesResult.value = null
+    }
+    fun setNewReleaseResultDone(){
+        _newReleaseResult.value = null
+    }
+    fun setFeaturedResultDone(){
+        _featuredResult.value = null
+    }
+
+    fun getIsFeaturedFromPaging():Boolean{
+        return isFeaturedFromPaging
+    }
+
+    fun getIsFeaturedInit():Boolean{
+        return isFeaturedInit
+    }
+
+    fun getIsNewReleaseInit():Boolean{
+        return isNewReleaseInit
+    }
+
+    fun setNewReleaseResultErr(){
+        _newReleaseResult.value = AlbumsResult(error = getString(R.string.categories_result_fail))
+    }
+
+    fun isFeaturedResultNull():Boolean{
+        return _featuredResult.value == null
+    }
+
+    fun isNewReleaseResultNull():Boolean{
+        return _newReleaseResult.value == null
+    }
+
+    fun initDataItemList(){
+        _newReleaseResult.value?.let {newRelease ->
+            _featuredResult.value?.let {featured ->
+                if (newRelease.data.isNotEmpty()){
+                    val newReleaseTitle = DataItem.Title(getString(R.string.new_rls_title))
+                    val newReleaseList = DataItem.NewReleaseList(newRelease.data)
+                    _dataItemList.value = listOf(newReleaseTitle,newReleaseList) + _dataItemList.value.orEmpty()
+                    isNewReleaseInit = true
+                }
+                if (featured.data.isNotEmpty()){
+                    val featuredTitle = DataItem.Title(getString(R.string.new_featured_title))
+                    val featuredList = featured.data.map {
+                        DataItem.Featured(it)
+                    }
+                    _dataItemList.value = _dataItemList.value.orEmpty() + featuredTitle + featuredList
+                    isFeaturedInit = true
+                }
+            }
+        }
+    }
+
+    fun setNewRelease(list: List<Album>){
+        if (list.isNotEmpty()&&!isNewReleaseInit){
+            val newReleaseTitle = DataItem.Title(getString(R.string.new_rls_title))
+            val newReleaseList = DataItem.NewReleaseList(list)
+            _dataItemList.value = listOf(newReleaseTitle,newReleaseList) + _dataItemList.value.orEmpty()
+            isNewReleaseInit = true
+        }
+    }
+
+    fun setFeatured(list: List<Album>){
+        if (list.isNotEmpty()){
+            if (isFeaturedFromPaging&&isFeaturedInit) {
+                val featuredList = list.map {
+                    DataItem.Featured(it)
+                }
+                _dataItemList.value = _dataItemList.value.orEmpty() + featuredList
+            }else if(!isFeaturedInit){
+                val featuredTitle = DataItem.Title(getString(R.string.new_featured_title))
+                val featuredList = list.map {
+                    DataItem.Featured(it)
+                }
+                _dataItemList.value = _dataItemList.value.orEmpty() + featuredTitle + featuredList
+                isFeaturedInit = true
+            }
+        }
     }
 
     private fun getCategoriesList() {
@@ -97,6 +187,7 @@ class NewViewModel(private val kkboxRepository: KkboxRepository, private val aut
             )
             when(result){
                 is RepoResult.Success -> {
+                    isFeaturedFromPaging = false
                     _featuredResult.value = result.data
                 }
                 is RepoResult.Err -> {
@@ -110,10 +201,6 @@ class NewViewModel(private val kkboxRepository: KkboxRepository, private val aut
         }
     }
 
-    fun setFeaturedList(list : List<Album>){
-        _featuredList.value = _featuredList.value.orEmpty() + list
-    }
-
     fun setNavigateToTracks(album: Album){
         _navigateToTracks.value = album
     }
@@ -123,8 +210,8 @@ class NewViewModel(private val kkboxRepository: KkboxRepository, private val aut
     }
 
     fun hasPaging():String?{
-        _featuredResult.value?.paging?.next?.let {
-            return it
+        nextPagingUrl?.let {
+            return it.next
         }
         return null
     }
@@ -141,6 +228,7 @@ class NewViewModel(private val kkboxRepository: KkboxRepository, private val aut
             )
             when(result){
                 is RepoResult.Success -> {
+                    isFeaturedFromPaging = true
                     _featuredResult.value = result.data
                 }
                 is RepoResult.Err -> {

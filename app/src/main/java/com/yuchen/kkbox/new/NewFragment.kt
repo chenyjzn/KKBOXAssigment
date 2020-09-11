@@ -3,6 +3,7 @@ package com.yuchen.kkbox.new
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -22,7 +23,11 @@ import com.yuchen.kkbox.network.LoadApiStatus
 
 class NewFragment : Fragment() {
     lateinit var binding: FragmentNewBinding
-    val viewModel: NewViewModel by viewModels{ getVmFactory(arguments?.getParcelable<Auth>("Auth")?:Auth()) }
+    val viewModel: NewViewModel by viewModels {
+        getVmFactory(
+            arguments?.getParcelable<Auth>("Auth") ?: Auth()
+        )
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentNewBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -31,25 +36,36 @@ class NewFragment : Fragment() {
         binding.newRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         viewModel.categoriesResult.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if (it.data.isNotEmpty()){
+                if (it.data.isEmpty()||it.error!=null){
+                    viewModel.setNewReleaseResultErr()
+                }else{
                     viewModel.getNewReleaseAlbumsByCategories(it.data[0].id)
                 }
+                viewModel.setCategoriesResultDone()
             }
         })
         viewModel.newReleaseResult.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitNewReleaseList(it.data)
-                adapter.notifyItemChanged(NEW_RELEASE_BODY)
+                if (!viewModel.isFeaturedResultNull()&&!viewModel.getIsFeaturedInit()&&!viewModel.getIsNewReleaseInit()) {
+                    viewModel.initDataItemList()
+                    viewModel.setNewReleaseResultDone()
+                }
             }
         })
         viewModel.featuredResult.observe(viewLifecycleOwner, Observer {
             it?.let {
-                viewModel.setFeaturedList(it.data)
+                if (!viewModel.isNewReleaseResultNull()&&!viewModel.getIsFeaturedInit()&&!viewModel.getIsNewReleaseInit()){
+                    viewModel.initDataItemList()
+                }else if(viewModel.getIsFeaturedFromPaging()){
+                    viewModel.setFeatured(it.data)
+                }
+                viewModel.nextPagingUrl = it.paging
+                viewModel.setFeaturedResultDone()
             }
         })
-        viewModel.featuredList.observe(viewLifecycleOwner, Observer {
+        viewModel.dataItemList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitFeaturedAlbumList(it)
+                adapter.submitList(it)
                 adapter.notifyDataSetChanged()
             }
         })
@@ -83,14 +99,6 @@ class NewFragment : Fragment() {
                 }
             }
         })
-
         return binding.root
-    }
-
-    companion object{
-        const val NEW_RELEASE_TITLE = 0
-        const val NEW_RELEASE_BODY = 1
-        const val NEW_FEATURED_TITLE = 2
-        const val NEW_FEATURED_BODY = 3
     }
 }

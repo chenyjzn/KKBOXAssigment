@@ -1,41 +1,35 @@
 package com.yuchen.kkbox.new
 
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.yuchen.kkbox.R
 import com.yuchen.kkbox.data.Album
+import com.yuchen.kkbox.data.DataItem
+import com.yuchen.kkbox.data.DataItem.Companion.FEATURED
+import com.yuchen.kkbox.data.DataItem.Companion.NEW_RELEASE_LIST
+import com.yuchen.kkbox.data.DataItem.Companion.TITLE
 import com.yuchen.kkbox.databinding.HolderNewReleaseBinding
 import com.yuchen.kkbox.databinding.HolderSongHorizontalBinding
 import com.yuchen.kkbox.databinding.HolderTitleBinding
-import com.yuchen.kkbox.new.NewFragment.Companion.NEW_FEATURED_TITLE
-import com.yuchen.kkbox.new.NewFragment.Companion.NEW_RELEASE_TITLE
 
-
-class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private var featuredAlbumList: List<Album> = listOf()
-    private var newReleaseAlbumList: List<Album>? = null
+class NewAdapter(private val viewModel: NewViewModel) : ListAdapter<DataItem, RecyclerView.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            HEADER -> TitleHolder(HolderTitleBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            NEW_RELEASE -> NewReleaseHolder(HolderNewReleaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            FEATURED_ALBUM -> SongHorizontalHolder(HolderSongHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            TITLE -> TitleHolder(HolderTitleBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            NEW_RELEASE_LIST -> NewReleaseHolder(HolderNewReleaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            FEATURED -> SongHorizontalHolder(HolderSongHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
 
     class TitleHolder(var binding: HolderTitleBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int) {
-            if (position == NEW_RELEASE_TITLE) {
-                binding.holderTitleText.text = binding.holderTitleText.resources.getString(R.string.new_rls_title)
-            }
-            if (position == NEW_FEATURED_TITLE)
-                binding.holderTitleText.text = binding.holderTitleText.resources.getString(R.string.new_featured_title)
+        fun bind(title: String) {
+            binding.holderTitleText.text = title
             binding.executePendingBindings()
         }
     }
@@ -57,53 +51,49 @@ class NewAdapter(private val viewModel: NewViewModel) : RecyclerView.Adapter<Rec
             val adapter = NewReleaseAdapter(viewModel)
             binding.holderNewReleaseRecycler.adapter = adapter
             binding.holderNewReleaseRecycler.layoutManager = LinearLayoutManager(binding.holderNewReleaseRecycler.context, LinearLayoutManager.HORIZONTAL,false)
+            binding.holderNewReleaseRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (!recyclerView.canScrollVertically(0)) {
+
+                    }
+                }
+            })
             adapter.submitList(newReleaseList)
             binding.executePendingBindings()
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            0 -> HEADER
-            1 -> NEW_RELEASE
-            2 -> HEADER
-            else -> FEATURED_ALBUM
+        return when (getItem(position)) {
+            is DataItem.Title -> TITLE
+            is DataItem.NewReleaseList -> NEW_RELEASE_LIST
+            is DataItem.Featured -> FEATURED
+            else -> throw IllegalArgumentException("wrong data item type")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is TitleHolder -> {
-                holder.bind(position)
+                holder.bind((getItem(position) as DataItem.Title).title)
             }
             is NewReleaseHolder -> {
-                newReleaseAlbumList?.let {
-                    holder.bind(it,viewModel)
-                }
+                holder.bind((getItem(position) as DataItem.NewReleaseList).albums,viewModel)
             }
             is SongHorizontalHolder -> {
-                featuredAlbumList?.let {
-                    holder.bind(it[position-3],viewModel)
-                }
+                holder.bind((getItem(position) as DataItem.Featured).album,viewModel)
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return featuredAlbumList.size + 3
-    }
+    companion object DiffCallback : DiffUtil.ItemCallback<DataItem>() {
+        override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+            return oldItem === newItem
+        }
 
-    fun submitFeaturedAlbumList(list: List<Album>) {
-        featuredAlbumList = list
-    }
-
-    fun submitNewReleaseList(list: List<Album>) {
-        newReleaseAlbumList = list
-    }
-
-    companion object{
-        const val HEADER = 0
-        const val NEW_RELEASE = 1
-        const val FEATURED_ALBUM = 2
+        override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+            return oldItem == newItem
+        }
     }
 }

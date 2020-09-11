@@ -28,6 +28,10 @@
             app:tabIndicatorColor="@color/orange_pager"
             app:tabTextAppearance="@style/customTabText" />
 
+        <androidx.viewpager.widget.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
